@@ -158,7 +158,7 @@ Each domain owns its own FX wiring and dependencies, and exposes a single module
 
 ### 4.1 Core app module (infra)
 - `config.NewViper` and `config.NewConfig`
-- `internal/logs.NewLogger`
+- `internal/logs.NewLogger` and `internal/logs.NewSugaredLogger`
 - `db.NewSQLXPostgresDB` (optional, enabled when `DB_HOST` + `DB_NAME` are present)
 - `cache.NewRedis` (optional, enabled when `REDIS_HOST` is present)
 
@@ -219,3 +219,8 @@ If you want to enforce the spec automatically (CI/pre-commit), add lightweight c
 - Verify `Makefile` contains a `start:` target and does not contain forbidden synonyms unless explicitly allowed.
 - Verify `cmd/server/main.go` exists.
 - Verify a `/health` route exists (e.g. by grepping for `r.Get(\"/health\"` or an integration test).
+
+## 9) Logging Convention (Zap Sugared)
+
+- App code (handlers, repos, services) **SHOULD** depend on `*zap.SugaredLogger` rather than `*zap.Logger`.
+- Keep `*zap.Logger` available for FX event logging via `fx.WithLogger` (see `cmd/server/main.go`).
