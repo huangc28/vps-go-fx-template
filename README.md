@@ -77,7 +77,8 @@ Use `--force` to overwrite if the target files already exist.
 For local development in this repo:
 
 ```bash
-go run ./cmd/adopt --dir ../../some/other/repo --scaffold
+cd cmd/adopt
+go run . --dir ../../some/other/repo --scaffold
 ```
 
 To enable `/adopt` in Codex, copy the skill into your Codex home (commonly `~/.codex/skills/adopt`).
