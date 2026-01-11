@@ -1,4 +1,5 @@
 .PHONY: start build/prod start/prod push/prod
+.PHONY: sqlc
 
 start:
 	go run ./cmd/server
@@ -12,3 +13,5 @@ start/prod:
 push/prod:
 	docker compose -f docker-compose.prod.yaml push
 
+sqlc:
+	sqlc generate

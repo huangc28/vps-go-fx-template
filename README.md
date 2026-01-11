@@ -1,27 +1,64 @@
-# vps-go-fx-template
+# VPS Go (FX + Chi) Boilerplate
 
-VPS-friendly Go service skeleton using:
+A VPS-friendly Go service skeleton using:
 - Uber FX for dependency injection
-- Chi for HTTP routing
+- chi for HTTP routing
+- zap for logging
 
-## Run locally
+## Quick start (run locally)
 
 ```bash
+cp .env.example .env
 make start
 curl http://localhost:${APP_PORT:-8080}/health
 ```
 
-No env vars are required; defaults are in `config/config.go`.
+## Start a brand new project
 
-Optional Postgres wiring is enabled when `DB_HOST` and `DB_NAME` are set (with `DB_USER`/`DB_PASSWORD` as needed).
-Optional Redis wiring is enabled when `REDIS_HOST` is set (and `REDIS_SCHEME` can be `redis` or `rediss`).
-
-## Production (Docker)
+1) Copy this repo as your new repo (or `git clone` it).
+2) Update the module path:
 
 ```bash
-cp .env.example .env
-make build/prod
-make start/prod
+go mod edit -module github.com/<you>/<your-service>
+go mod tidy
 ```
 
-Image name/tag can be customized via `IMAGE`/`TAG` when running the compose commands.
+3) Run it:
+
+```bash
+make start
+```
+
+## Adopt into an existing project (non-destructive)
+
+This writes guidance files into your existing repo without changing runtime code.
+
+From the root of the repo you want to adopt into:
+
+```bash
+go run /path/to/vps-go-fx-template/cmd/adopt --dir .
+```
+
+Outputs:
+- `AGENTS.md`
+- `architecture/vps-go-fx-template.md`
+
+Use `--force` to overwrite if those files already exist.
+
+## Optional integrations
+
+- Postgres: enabled when `DB_HOST` + `DB_NAME` are set (`DB_USER`/`DB_PASSWORD` as needed).
+- Redis: enabled when `REDIS_HOST` is set (`REDIS_SCHEME` can be `redis` or `rediss`).
+
+## sqlc (optional)
+
+This repo includes a ready-to-run `sqlc.yaml` that reads:
+- schema: `supabase/schema.sql`
+- queries: `db/query/*.sql`
+- output: `db/sqlc` (package `dbsqlc`)
+
+Install `sqlc` and run:
+
+```bash
+make sqlc
+```
