@@ -23,6 +23,7 @@ Read `architecture/vps-go-fx-template.md` before making structural changes or do
   - Use `db.Tx` (`db/tx.go`) as the standard transaction wrapper where appropriate.
 - Redis uses go-redis via `cache.NewRedis` and must be closed via `fx.Lifecycle` hooks.
   - Enabled when `REDIS_HOST` is set; otherwise wiring must not block startup.
+- Deterministic scaffolding: when initializing/adopting this architecture, reuse the repo’s existing `db/` and `cache/` packages as-is (do not invent new DB/Redis implementations or alternate package paths unless explicitly asked).
 - Logging uses zap:
   - App logging can use `*zap.Logger` or `*zap.SugaredLogger` (preferred for request logs).
   - FX event logs should be routed through zap (see `fx.WithLogger` in `cmd/server/main.go`).
@@ -44,4 +45,3 @@ When asked to “expose an existing package as a service”:
 - Prefer minimal changes to the existing package; wrap it with constructors and FX providers.
 - Create one example route and ensure `GET /health` still works.
 - Update `README.md` with exact run steps and required env vars (none required; list optional ones).
-

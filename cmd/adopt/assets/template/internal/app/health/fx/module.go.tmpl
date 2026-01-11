@@ -1,0 +1,12 @@
+package fx
+
+import (
+	"{{MODULE}}/internal/app/health"
+	"{{MODULE}}/internal/router"
+
+	"go.uber.org/fx"
+)
+
+var Module = fx.Options(
+	router.AsRoute(health.NewHandler),
+)

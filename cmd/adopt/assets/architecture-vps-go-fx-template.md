@@ -4,6 +4,41 @@ This document defines a conservative, reusable boilerplate/template plan for dep
 
 The key change vs Vercel: the process is **long-lived**, so we **bootstrap FX once** at startup and run an `http.Server` until shutdown.
 
+## Document Status (Normative When Referenced)
+
+When a human asks to “initialize/adopt/migrate this repo to `architecture/vps-go-fx-template.md`”, treat this document as a **spec**, not an inspiration.
+
+Normative terms:
+- **MUST / MUST NOT**: non-negotiable requirements.
+- **SHOULD / SHOULD NOT**: strong defaults; deviate only with explicit human instruction.
+- **MAY**: optional.
+
+Rules to prevent architecture drift:
+- When this document specifies an exact filename, package path, route, or Makefile target name, agents **MUST implement it verbatim**.
+- Agents **MUST NOT introduce alternative names/paths/aliases** “for convenience” unless explicitly asked by the human.
+- If a deviation seems beneficial, the agent **MUST ask first** and wait for confirmation.
+
+## Acceptance Criteria (Initialization)
+
+An “adoption/initialization” is only complete when all of these are true:
+- Entrypoint exists at `cmd/server/main.go` and boots FX **once** (long-lived process).
+- HTTP routing uses `chi`, and HTTP handlers implement `internal/router.Handler`.
+- At least one route exists: `GET /health` returns `200` and `{ "ok": true }` using `internal/pkg/render.ChiJSON`.
+- `make start` exists and runs `go run ./cmd/server` (no alternate targets unless explicitly requested).
+- `go test ./...` and `go build ./...` succeed without requiring Postgres/Redis (infra is optional/gated by env vars).
+
+## Deterministic Infra Scaffolding (DB/Redis) — Hard Rules
+
+- Agents **MUST** use the canonical infra packages **exactly** as provided by this template:
+  - Postgres: `db/` (SQLX + pgx via `db.NewSQLXPostgresDB`)
+  - Redis: `cache/` (go-redis via `cache.NewRedis`)
+- Agents **MUST NOT** invent alternative DB/Redis implementations or alternate package paths unless explicitly instructed by a human.
+- In a different repo (adoption), if these packages do not exist, agents **MUST** copy `db/` and `cache/` into place (and only adjust import paths/module name as needed), rather than rewriting them from scratch.
+
+Recommended adoption mechanism (deterministic):
+- Prefer scaffolding from this repo’s canonical code via `go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir . --scaffold`
+- Then run `go mod tidy` in the target repo to pull required deps.
+
 ## 0) Inngest (prebuilt, optional)
 
 The VPS template should include an optional Inngest HTTP endpoint out of the box (same intent as the Vercel variant), implemented as a normal route on the long-lived server:
@@ -170,4 +205,3 @@ Keep the same config approach (Viper + defaults). Typical vars:
   - `REDIS_HOST`
   - `REDIS_PORT` (default: `6379`)
   - `REDIS_SCHEME` (default: `redis`, use `rediss` for TLS)
-

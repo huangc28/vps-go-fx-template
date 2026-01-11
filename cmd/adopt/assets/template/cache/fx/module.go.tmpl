@@ -1,0 +1,12 @@
+package fx
+
+import (
+	"{{MODULE}}/cache"
+
+	"go.uber.org/fx"
+)
+
+var Module = fx.Module(
+	"redis",
+	fx.Provide(cache.NewRedis),
+)
