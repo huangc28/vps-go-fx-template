@@ -128,7 +128,7 @@ Each domain owns its own FX wiring and dependencies, and exposes a single module
 - `config.NewViper` and `config.NewConfig`
 - `internal/logs.NewLogger`
 - `db.NewSQLXPostgresDB` (optional, enabled when `DB_HOST` + `DB_NAME` are present)
-- `cache.NewRedis` (optional, enabled when `REDIS_URL` is present)
+- `cache.NewRedis` (optional, enabled when `REDIS_HOST` is present)
 
 ### 4.2 Router module
 - `internal/router.Handler` interface:
@@ -202,7 +202,12 @@ Keep the same config approach (Viper + defaults). Typical vars:
   - `DB_HOST`
   - `DB_PORT` (default: `5432`)
   - `DB_NAME`
-- `REDIS_URL` (optional; if empty Redis is disabled)
+- Redis (optional; disabled unless `REDIS_HOST` is set):
+  - `REDIS_USER`
+  - `REDIS_PASSWORD`
+  - `REDIS_HOST`
+  - `REDIS_PORT` (default: `6379`)
+  - `REDIS_SCHEME` (default: `redis`, use `rediss` for TLS)
 
 Minimal to spin up locally: none (use defaults), optionally set `APP_PORT`.
 
@@ -236,7 +241,7 @@ The template should compile even if generated code is not present (don’t hard-
 To make it easy for a developer (or an AI agent) to implement and use the boilerplate with minimal setup:
 
 - The project must start with **zero required env vars** (sensible defaults).
-- Postgres/Redis must be **optional** and disabled unless `DB_HOST` + `DB_NAME` are set / `REDIS_URL` is set.
+- Postgres/Redis must be **optional** and disabled unless `DB_HOST` + `DB_NAME` are set / `REDIS_HOST` is set.
 - Provide an `.env.example` and document the exact minimal commands to run locally.
 - Include a small, non-destructive “adopter” CLI (`cmd/adopt`) so an existing repo can add Codex guidance without reorganizing code.
 
@@ -302,7 +307,7 @@ None required (use defaults). The only commonly-set variable for local dev shoul
 
 Optional integrations:
 - Postgres: `DB_HOST`, `DB_NAME` (plus `DB_USER`/`DB_PASSWORD` as needed)
-- Redis: `REDIS_URL`
+- Redis: `REDIS_HOST` (plus `REDIS_USER`/`REDIS_PASSWORD` as needed)
 - Inngest (for real use): `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY` (and optional `INNGEST_SIGNING_KEY_FALLBACK`), plus `INNGEST_APP_ID` (optional/labeling)
 
 ## 13) Implement Using `gonew` (Adopt / Instantiate)
@@ -362,7 +367,7 @@ This mirrors the Vercel template’s domain/module pattern, but the app boots on
 - Set image naming defaults in `docker-compose.prod.yaml` (e.g. `IMAGE`, `TAG`) for your registry.
 - Confirm optional infra behavior:
 - If `DB_HOST` or `DB_NAME` is empty, DB wiring should no-op or return a clear disabled error at call sites (but must not block startup).
-  - If `REDIS_URL` is empty, Redis wiring should be disabled (but must not block startup).
+  - If `REDIS_HOST` is empty, Redis wiring should be disabled (but must not block startup).
 - If you enable Inngest, confirm missing keys gate requests with `501/503` rather than failing startup.
 
 ### 13.6 Private template notes (if applicable)

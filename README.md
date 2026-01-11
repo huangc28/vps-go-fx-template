@@ -14,6 +14,7 @@ curl http://localhost:${APP_PORT:-8080}/health
 No env vars are required; defaults are in `config/config.go`.
 
 Optional Postgres wiring is enabled when `DB_HOST` and `DB_NAME` are set (with `DB_USER`/`DB_PASSWORD` as needed).
+Optional Redis wiring is enabled when `REDIS_HOST` is set (and `REDIS_SCHEME` can be `redis` or `rediss`).
 
 ## Production (Docker)
 

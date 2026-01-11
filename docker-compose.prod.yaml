@@ -17,5 +17,10 @@ services:
       DB_HOST: ${DB_HOST:-}
       DB_PORT: ${DB_PORT:-5432}
       DB_NAME: ${DB_NAME:-}
+      REDIS_USER: ${REDIS_USER:-}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_HOST: ${REDIS_HOST:-}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_SCHEME: ${REDIS_SCHEME:-redis}
     ports:
       - "${APP_PORT:-8080}:${APP_PORT:-8080}"

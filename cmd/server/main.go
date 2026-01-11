@@ -5,6 +5,7 @@ import (
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"
 
+	cachefx "vps-go-fx-template/cache/fx"
 	dbfx "vps-go-fx-template/db/fx"
 	appfx "vps-go-fx-template/internal/app/fx"
 	healthfx "vps-go-fx-template/internal/app/health/fx"
@@ -19,6 +20,7 @@ func main() {
 		}),
 		appfx.CoreAppOptions,
 		dbfx.Module,
+		cachefx.Module,
 		routerfx.CoreRouterOptions,
 		serverfx.ServerOptions,
 		healthfx.Module,
