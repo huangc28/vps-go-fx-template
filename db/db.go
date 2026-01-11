@@ -102,7 +102,7 @@ type SQLXOut struct {
 	Conn Conn
 }
 
-func NewSQLXPostgresDB(lc fx.Lifecycle, cfg config.Config, logger *zap.Logger) (SQLXOut, error) {
+func NewSQLXPostgresDB(lc fx.Lifecycle, cfg config.Config, logger *zap.SugaredLogger) (SQLXOut, error) {
 	if strings.TrimSpace(cfg.DB.Host) == "" || strings.TrimSpace(cfg.DB.Name) == "" {
 		logger.Info("postgres_disabled")
 		return SQLXOut{DB: nil, Conn: newDisabledConn()}, nil
