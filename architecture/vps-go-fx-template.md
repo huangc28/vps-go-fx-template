@@ -345,6 +345,8 @@ If you only want to add Codex/agent guidance files (no code changes), include th
 go run github.com/<org>/go-vps-fx-template/cmd/adopt@latest --dir .
 ```
 
+If you want `go run .../cmd/adopt@latest` to work without requiring the *root* template module path to match the repo, make `cmd/adopt` its own nested module by adding `cmd/adopt/go.mod` with `module github.com/<org>/go-vps-fx-template/cmd/adopt`.
+
 This should write (without touching runtime code):
 - `AGENTS.md`
 - `architecture/go-vps-reusable-template-plan.md`

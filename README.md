@@ -39,6 +39,15 @@ From the root of the repo you want to adopt into:
 go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir .
 ```
 
+Note: `cmd/adopt` is a standalone Go module (it has its own `cmd/adopt/go.mod`), so it stays runnable via `go run .../cmd/adopt@latest` even if the template root module path changes.
+
+For local development in this repo:
+
+```bash
+cd cmd/adopt
+go run . --dir ../../some/other/repo
+```
+
 Outputs:
 - `AGENTS.md`
 - `architecture/vps-go-fx-template.md`
