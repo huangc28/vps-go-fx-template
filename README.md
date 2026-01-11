@@ -36,7 +36,7 @@ This writes guidance files into your existing repo without changing runtime code
 From the root of the repo you want to adopt into:
 
 ```bash
-go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir .
+GOPROXY=direct go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir .
 ```
 
 Note: `cmd/adopt` is a standalone Go module (it has its own `cmd/adopt/go.mod`), so it stays runnable via `go run .../cmd/adopt@latest` even if the template root module path changes.
