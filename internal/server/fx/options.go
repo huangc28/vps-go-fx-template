@@ -4,6 +4,7 @@ import (
 	"context"
 	"net"
 	"net/http"
+	"time"
 
 	"vps-go-fx-template/config"
 	"vps-go-fx-template/internal/server"
@@ -51,7 +52,7 @@ func registerLifecycleHooks(p hooksParams) {
 		OnStop: func(ctx context.Context) error {
 			p.Logger.Info("http_server_stopping")
 
-			shutdownCtx, cancel := context.WithTimeout(context.Background(), p.Config.ShutdownTimeout)
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
 			return p.Server.Shutdown(shutdownCtx)

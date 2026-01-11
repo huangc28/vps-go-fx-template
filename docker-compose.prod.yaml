@@ -11,12 +11,13 @@ services:
       APP_ENV: ${APP_ENV:-production}
       APP_PORT: ${APP_PORT:-8080}
       LOG_LEVEL: ${LOG_LEVEL:-info}
-      APP_SHUTDOWN_TIMEOUT: ${APP_SHUTDOWN_TIMEOUT:-10s}
+
       DB_USER: ${DB_USER:-}
       DB_PASSWORD: ${DB_PASSWORD:-}
       DB_HOST: ${DB_HOST:-}
       DB_PORT: ${DB_PORT:-5432}
       DB_NAME: ${DB_NAME:-}
+
       REDIS_USER: ${REDIS_USER:-}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       REDIS_HOST: ${REDIS_HOST:-}

@@ -2,17 +2,15 @@ package config
 
 import (
 	"strings"
-	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	AppName         string
-	Env             string
-	Port            int
-	LogLevel        string
-	ShutdownTimeout time.Duration
+	AppName  string
+	Env      string
+	Port     int
+	LogLevel string
 
 	DB    DBConfig
 	Redis RedisConfig
@@ -44,7 +42,6 @@ func NewViper() *viper.Viper {
 	v.SetDefault("APP_ENV", "development")
 	v.SetDefault("APP_PORT", 8080)
 	v.SetDefault("LOG_LEVEL", "info")
-	v.SetDefault("APP_SHUTDOWN_TIMEOUT", "10s")
 
 	v.SetDefault("DB_USER", "")
 	v.SetDefault("DB_PASSWORD", "")
@@ -62,17 +59,11 @@ func NewViper() *viper.Viper {
 }
 
 func NewConfig(v *viper.Viper) (Config, error) {
-	timeout, err := time.ParseDuration(v.GetString("APP_SHUTDOWN_TIMEOUT"))
-	if err != nil {
-		return Config{}, err
-	}
-
 	return Config{
-		AppName:         v.GetString("APP_NAME"),
-		Env:             v.GetString("APP_ENV"),
-		Port:            v.GetInt("APP_PORT"),
-		LogLevel:        v.GetString("LOG_LEVEL"),
-		ShutdownTimeout: timeout,
+		AppName:  v.GetString("APP_NAME"),
+		Env:      v.GetString("APP_ENV"),
+		Port:     v.GetInt("APP_PORT"),
+		LogLevel: v.GetString("LOG_LEVEL"),
 		DB: DBConfig{
 			User:     v.GetString("DB_USER"),
 			Password: v.GetString("DB_PASSWORD"),

@@ -36,14 +36,19 @@ This writes guidance files into your existing repo without changing runtime code
 From the root of the repo you want to adopt into:
 
 ```bash
-go run /path/to/vps-go-fx-template/cmd/adopt --dir .
+go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir .
 ```
 
 Outputs:
 - `AGENTS.md`
 - `architecture/vps-go-fx-template.md`
+- `codex/skills/adopt/SKILL.md`
 
 Use `--force` to overwrite if those files already exist.
+
+Note: `go run` does not support `https://...` URLs; use the module path form above.
+
+To enable `/adopt` in Codex, copy the skill into your Codex home (commonly `~/.codex/skills/adopt`).
 
 ## Optional integrations
 

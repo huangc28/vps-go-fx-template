@@ -52,6 +52,15 @@ func run(dir string, force bool) error {
 		return err
 	}
 
+	if err := writeAsset(
+		targetDir,
+		filepath.Join("codex", "skills", "adopt", "SKILL.md"),
+		"assets/codex-skills-adopt-SKILL.md",
+		force,
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
 
