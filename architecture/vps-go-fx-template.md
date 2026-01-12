@@ -15,7 +15,7 @@ Normative terms:
 
 Rules to prevent architecture drift:
 - When this document specifies an exact filename, package path, route, or Makefile target name, agents **MUST implement it verbatim**.
-- Agents **MUST NOT introduce alternative names/paths/aliases** “for convenience” (e.g. adding `make server` when the spec says `make start`) unless explicitly asked by the human.
+- Agents **MUST NOT introduce alternative names/paths/aliases** “for convenience” unless explicitly asked by the human.
 - If a deviation seems beneficial, the agent **MUST ask first** and wait for confirmation.
 
 ## Acceptance Criteria (Initialization)
@@ -29,14 +29,14 @@ An “adoption/initialization” is only complete when all of these are true:
 
 ## Deterministic Infra Scaffolding (DB/Redis) — Hard Rules
 
-When asked to “initialize/adopt/migrate this repo to `architecture/vps-go-fx-template.md`”, infra wiring must be **deterministic**:
-
 - Agents **MUST** use the canonical infra packages **exactly** as provided by this template:
   - Postgres: `db/` (SQLX + pgx via `db.NewSQLXPostgresDB`)
   - Redis: `cache/` (go-redis via `cache.NewRedis`)
-- Agents **MUST NOT** invent alternative DB/Redis implementations (new DSN builders, different clients, new package paths like `internal/db`, “better” wrappers, etc.) unless explicitly instructed by a human.
+- Agents **MUST NOT** invent alternative DB/Redis implementations or alternate package paths unless explicitly instructed by a human.
 - In a different repo (adoption), if these packages do not exist, agents **MUST** copy `db/` and `cache/` into place (and only adjust import paths/module name as needed), rather than rewriting them from scratch.
-- Any behavior changes (TLS, pooling, timeouts) **SHOULD** be made by adding config knobs while preserving the package paths and constructor names/signatures, unless a human explicitly requests a redesign.
+- Agents **MUST** implement `config/config.go` to match `architecture/config-go.md` **verbatim** (treat it as a spec).
+- Agents **MUST** implement `db/db.go` to match `architecture/db-go.md` **verbatim** (treat it as a spec).
+- Agents **MUST** implement `cache/redis.go` to match `architecture/cache-redis-go.md` **verbatim** (treat it as a spec).
 
 Recommended adoption mechanism (deterministic):
 - Prefer scaffolding from this repo’s canonical code via `go run github.com/huangc28/vps-go-fx-template/cmd/adopt@latest --dir . --scaffold`
@@ -179,12 +179,8 @@ The server module depends on the constructed `*chi.Mux` and config/logger.
 
 ## 5) Makefile + Production Workflow
 
-Makefile targets (strict):
-- The Makefile **MUST** provide `start` which runs `go run ./cmd/server`.
-- The Makefile **MUST NOT** add synonyms/aliases (e.g. `server`) unless explicitly requested by the human.
-- Production targets **MAY** be added as described below.
-
-Production workflow (optional):
+Proposed Makefile targets:
+- `make start` runs `go run ./cmd/server`.
 - `make build/prod`, `make start/prod`, `make push/prod` use `docker-compose.prod.yaml`.
 
 ## 6) Minimal Example Domain (`health`)
@@ -213,14 +209,7 @@ Keep the same config approach (Viper + defaults). Typical vars:
   - `REDIS_PORT` (default: `6379`)
   - `REDIS_SCHEME` (default: `redis`, use `rediss` for TLS)
 
-## 8) Drift Prevention (Recommended)
+## 8) Logging Convention (Zap Sugared)
 
-If you want to enforce the spec automatically (CI/pre-commit), add lightweight checks such as:
-- Verify `Makefile` contains a `start:` target and does not contain forbidden synonyms unless explicitly allowed.
-- Verify `cmd/server/main.go` exists.
-- Verify a `/health` route exists (e.g. by grepping for `r.Get(\"/health\"` or an integration test).
-
-## 9) Logging Convention (Zap Sugared)
-
-- App code (handlers, repos, services) **SHOULD** depend on `*zap.SugaredLogger` rather than `*zap.Logger`.
+- App code (handlers, repos, services) should depend on `*zap.SugaredLogger` rather than `*zap.Logger`.
 - Keep `*zap.Logger` available for FX event logging via `fx.WithLogger` (see `cmd/server/main.go`).

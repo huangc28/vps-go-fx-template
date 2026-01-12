@@ -14,13 +14,13 @@ import (
 type httpServerParams struct {
 	fx.In
 
-	Config config.Config
+	Config *config.Config
 	Router *chi.Mux
 }
 
 func NewHTTPServer(p httpServerParams) *http.Server {
 	return &http.Server{
-		Addr:              fmt.Sprintf(":%d", p.Config.Port),
+		Addr:              fmt.Sprintf("%s:%s", p.Config.App.Addr, p.Config.App.Port),
 		Handler:           p.Router,
 		ReadTimeout:       15 * time.Second,
 		ReadHeaderTimeout: 5 * time.Second,

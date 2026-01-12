@@ -57,6 +57,33 @@ func run(dir string, force bool, scaffold bool) error {
 
 	if err := writeAsset(
 		targetDir,
+		filepath.Join("architecture", "config-go.md"),
+		"assets/architecture-config-go.md",
+		force,
+	); err != nil {
+		return err
+	}
+
+	if err := writeAsset(
+		targetDir,
+		filepath.Join("architecture", "db-go.md"),
+		"assets/architecture-db-go.md",
+		force,
+	); err != nil {
+		return err
+	}
+
+	if err := writeAsset(
+		targetDir,
+		filepath.Join("architecture", "cache-redis-go.md"),
+		"assets/architecture-cache-redis-go.md",
+		force,
+	); err != nil {
+		return err
+	}
+
+	if err := writeAsset(
+		targetDir,
 		filepath.Join("codex", "skills", "adopt", "SKILL.md"),
 		"assets/codex-skills-adopt-SKILL.md",
 		force,

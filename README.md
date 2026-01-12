@@ -3,7 +3,7 @@
 A VPS-friendly Go service skeleton using:
 - Uber FX for dependency injection
 - chi for HTTP routing
-- zap for logging
+- zap for logging (use `*zap.SugaredLogger` in app code)
 
 ## Quick start (this repo)
 
